@@ -18,7 +18,7 @@
 
 Make sure that you have Android Studio Arctic Fox 2020.3.1 + and sdk version 33 
 
-### Architectures
+## Architectures
 
 #### Clean Architecture
 This application has implemented clean architecture so the package layout is divided by three:
@@ -43,7 +43,7 @@ the presentation layout implements MVVM approach and using `androidx.lifecycle.V
 
 [MVVM Architecture](https://en.wikipedia.org/wiki/Model-view-viewmodel "Model View ViewModel")
 
-#### Libraries
+## Libraries
 
 - Retrofit: This library is mostly to make http calls
 - Moshi: Json parser
@@ -57,7 +57,7 @@ For unit testing:
 For ui testing:
 - jetpack compose test libraries
 
-#### Test Coverage
+## Test Coverage
 ##### - Unit Test
 
 This project is located in android test `src/test/java/com/test/channel9` and contains the following test:
@@ -77,6 +77,6 @@ This project is located in android test `src/androidTest/java/com/test/channel9`
 - MainScreenTest -> this ui test covers that MainScreen load the list of articles
 - AlertdialogPopUpTest -> this test is isolated for testing and only test dismiss button action
 
-#### Any Additional Features
+## Any Additional Features
 
 - Jetpack Compose -> This project implements Jetpack Compose and Material Design 3 
