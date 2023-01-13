@@ -136,7 +136,7 @@ fun NewsArticleItem(asset: Asset, viewModel: MainScreenViewModel, navHostControl
                     modifier = Modifier
                         .width(102.dp)
                         .height(68.dp)
-                        .padding(start = 5.dp),
+                        .padding(start = 5.dp, top = 3.dp),
                     imageModel = { viewModel.findThumbnailImage(asset.relatedImages).url },
                     imageOptions = ImageOptions(
                         contentScale = ContentScale.Crop,

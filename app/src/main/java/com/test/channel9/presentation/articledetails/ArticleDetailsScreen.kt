@@ -18,6 +18,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 
 const val ARTICLE_DETAIL_TEST_TAG = "article_detail_test_tag"
+const val ARTICLE_DETAIL_BACK_BUTTON_TEST_TAG = "article_detail_back_button_test_tag"
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,7 +36,10 @@ fun ArticleDetailsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navHostController.popBackStack() }) {
+                    IconButton(
+                        onClick = { navHostController.popBackStack() },
+                        modifier = Modifier.testTag(ARTICLE_DETAIL_BACK_BUTTON_TEST_TAG)
+                    ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "",
