@@ -28,10 +28,10 @@ This layout contains business logic
 ##### Presentation layout
 In this layout contains all the ui screens that in this case are made using Jetpack Compose
 
-![Clean Architecture] (https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg)
+[Clean Architecture] (https://blog.cleancoder.com/uncle-bob/images/2012-08-13-the-clean-architecture/CleanArchitecture.jpg)
 
 #### MVVM Architecture
 
 the presentation layout implements MVVM approach and using `androidx.lifecycle.ViewModel`
 
-![MVVM Architecture] (https://cdn.ttgtmedia.com/rms/onlineimages/whatis-model_view_viewmodel.png)
+[MVVM Architecture] (https://cdn.ttgtmedia.com/rms/onlineimages/whatis-model_view_viewmodel.png)
