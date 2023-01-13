@@ -9,7 +9,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import com.test.channel9.R
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -27,6 +28,8 @@ fun ArticleDetailsScreen(
     url: String,
     navHostController: NavHostController
 ) {
+    val articleUrl = rememberSaveable { mutableStateOf(url) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar (
@@ -53,15 +56,13 @@ fun ArticleDetailsScreen(
                 )
             )
         },
-        content = { ArticleDetailsLayout(url) },
+        content = { ArticleDetailsLayout(articleUrl.value) },
         modifier = Modifier.testTag(ARTICLE_DETAIL_TEST_TAG)
     )
 }
 
 @Composable
 fun ArticleDetailsLayout(url: String) {
-
-    val articleUrl = remember { url }
 
     AndroidView(factory = {
         WebView(it).apply {
@@ -70,9 +71,9 @@ fun ArticleDetailsLayout(url: String) {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
             webViewClient = WebViewClient()
-            loadUrl(articleUrl)
+            loadUrl(url)
         }
     }, update = {
-        it.loadUrl(articleUrl)
+        it.loadUrl(url)
     })
 }

@@ -37,9 +37,6 @@ fun MainScreen(
     viewModel: MainScreenViewModel,
     navHostController: NavHostController
 ) {
-    LaunchedEffect(Unit){
-        viewModel.fetchNewsArticles()
-    }
     when(viewModel.state.collectAsState().value){
         is MainScreenViewModel.MainScreenState.ShowLoading -> {
             LoadingScreen(isVisible = true)

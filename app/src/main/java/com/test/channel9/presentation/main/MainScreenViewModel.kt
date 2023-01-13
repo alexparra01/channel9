@@ -26,6 +26,10 @@ class MainScreenViewModel @Inject constructor(
     private var _state = MutableStateFlow<MainScreenState>(MainScreenState.ShowLoading)
     val state = _state.asStateFlow()
 
+    init {
+        fetchNewsArticles()
+    }
+
     fun fetchNewsArticles () {
         _state.value = MainScreenState.ShowLoading
         viewModelScope.launch {
