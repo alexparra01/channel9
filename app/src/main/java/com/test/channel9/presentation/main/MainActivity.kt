@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-
             Channel9Theme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
