@@ -23,6 +23,8 @@ class MainScreenViewModel @Inject constructor(
     ): ViewModel() {
 
     private var articles: List<Asset> by mutableStateOf(emptyList())
+    private var _refreshState = MutableStateFlow(false)
+    val refreshState = _refreshState.asStateFlow()
     private var _state = MutableStateFlow<MainScreenState>(MainScreenState.ShowLoading)
     val state = _state.asStateFlow()
 

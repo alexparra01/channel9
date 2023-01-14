@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,39 +58,54 @@ fun MainScreen(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun NewsArticlesListLayout(viewModel: MainScreenViewModel, navHostController: NavHostController) {
 
     val articles = rememberSaveable { mutableStateOf(viewModel.articlesList()) }
+    val isRefreshing = viewModel.refreshState.collectAsState().value
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = { viewModel.fetchNewsArticles() }
+    )
+    Box(modifier = Modifier
+        .pullRefresh(pullRefreshState)) {
+        Column {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.app_bar_main_title),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = Color.White,
+                ),
+            )
 
-    Column {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = stringResource(id = R.string.app_bar_main_title),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = Color.White,
-            ),
-        )
-        LazyColumn(
-            state = rememberForeverLazyListState(key = OVERVIEW),
-            modifier = Modifier.testTag(NEWS_ARTICLES_TEST_TAG)
-        ) {
-            items(
-                articles.value
-            ){
-                NewsArticleItem(
-                    asset = it,
-                    viewModel = viewModel,
-                    navHostController = navHostController
-                )
+            LazyColumn(
+                state = rememberForeverLazyListState(key = OVERVIEW),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(NEWS_ARTICLES_TEST_TAG)
+            ) {
+                items(
+                    articles.value
+                ) {
+                    NewsArticleItem(
+                        asset = it,
+                        viewModel = viewModel,
+                        navHostController = navHostController
+                    )
+                }
             }
         }
+        PullRefreshIndicator(
+            isRefreshing,
+            pullRefreshState,
+            Modifier.align(Alignment.TopCenter)
+        )
     }
 
 }
