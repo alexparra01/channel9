@@ -31,6 +31,7 @@ import com.test.channel9.presentation.extensions.navigate
 import com.test.channel9.presentation.uicomponents.alertdialog.AlertDialogPopUp
 import com.test.channel9.presentation.uicomponents.gestures.rememberForeverLazyListState
 import com.test.channel9.presentation.uicomponents.loaging.LoadingScreen
+import com.test.channel9.presentation.uicomponents.visibility.Visibility
 import com.test.channel9.presentation.util.Constants
 
 const val OVERVIEW = "Overview"
@@ -171,13 +172,15 @@ fun NewsArticleItem(asset: Asset, viewModel: MainScreenViewModel, navHostControl
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row {
-                Text(
-                    text = stringResource(id = R.string.app_main_card_by_label),
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = Color.Gray
+                Visibility(visible = asset.byLine.isNotEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.app_main_card_by_label),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = Color.Gray
 
-                )
+                    )
+                }
                 Text(
                     text = asset.byLine,
                     fontWeight = FontWeight.Normal,

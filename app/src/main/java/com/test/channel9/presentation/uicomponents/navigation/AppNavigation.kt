@@ -18,16 +18,13 @@ import com.test.channel9.presentation.util.Constants
 @Composable
 fun AppNavigation(initialDestination: String) {
     val navController = rememberNavController()
-    val mainViewModel = hiltViewModel<MainScreenViewModel>()
-    val viewModelState = remember { mutableStateOf(mainViewModel) }
     NavHost(
         navController = navController,
         startDestination =  initialDestination
     ) {
-
         composable(route = AppNavigationState.MainScreenView.route) {
             MainScreen(
-                viewModel = viewModelState.value,
+                viewModel = hiltViewModel(),
                 navHostController = navController
             )
         }
