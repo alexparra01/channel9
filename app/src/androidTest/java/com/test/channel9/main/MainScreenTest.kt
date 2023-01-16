@@ -2,22 +2,11 @@ package com.test.channel9.main
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.test.channel9.domain.models.states.navigation.AppNavigationState
 import com.test.channel9.presentation.main.MainActivity
 import com.test.channel9.presentation.main.NEWS_ARTICLES_TEST_TAG
 import com.test.channel9.presentation.uicomponents.loaging.LOADING_TEST_TAG
-import com.test.channel9.presentation.uicomponents.navigation.AppNavigation
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Before
-import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.OrderWith
-import org.junit.runner.RunWith
-import org.junit.runners.MethodSorters
 
 
 class MainScreenTest {

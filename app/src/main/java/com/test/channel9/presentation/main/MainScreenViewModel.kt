@@ -33,8 +33,9 @@ class MainScreenViewModel @Inject constructor(
     fun fetchNewsArticles () {
         viewModelScope.launch {
             newsArticlesUseCase.fetchNewsArticles()
-                .debounce(200)
-                .onStart { _state.value = MainScreenState.ShowLoading }
+                .onStart {
+                    _state.value = MainScreenState.ShowLoading
+                }
                 .collect {
                     when(it){
                         is NetworkResult.Success -> {
