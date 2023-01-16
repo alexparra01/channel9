@@ -11,9 +11,10 @@ import com.test.channel9.domain.models.Asset
 import com.test.channel9.domain.models.RelatedImage
 import com.test.channel9.domain.models.states.netmodels.NetworkResult
 import com.test.channel9.domain.usecases.NewsArticlesUseCase
+import com.test.channel9.presentation.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,14 +29,12 @@ class MainScreenViewModel @Inject constructor(
     private var _state = MutableStateFlow<MainScreenState>(MainScreenState.ShowLoading)
     val state = _state.asStateFlow()
 
-    init {
-        fetchNewsArticles()
-    }
-
+    @OptIn(FlowPreview::class)
     fun fetchNewsArticles () {
-        _state.value = MainScreenState.ShowLoading
         viewModelScope.launch {
             newsArticlesUseCase.fetchNewsArticles()
+                .debounce(200)
+                .onStart { _state.value = MainScreenState.ShowLoading }
                 .collect {
                     when(it){
                         is NetworkResult.Success -> {
@@ -43,11 +42,11 @@ class MainScreenViewModel @Inject constructor(
                                 this@MainScreenViewModel.articles = articles
                                 _state.value = MainScreenState.ShowData
                             }
-                            Log.d(::MainActivity.name, "Success")
+                            Log.d(::MainActivity.name, Constants.SUCCESS)
                         }
                         is NetworkResult.Error -> {
                             _state.value = MainScreenState.ShowError(it.message ?: "")
-                            Log.d(::MainActivity.name, "Error")
+                            Log.d(::MainActivity.name, Constants.Error)
                         }
                     }
 

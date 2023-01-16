@@ -26,7 +26,8 @@ fun AlertDialogPopUp(isShowingDialog: Boolean, callback:() -> Unit) {
             title = {
                 Text(
                     text = stringResource(id = R.string.error_alert_dialog_title),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.testTag(ALERT_DIALOG_TEST_TAG)
                 )
             },
             text = {
@@ -38,8 +39,7 @@ fun AlertDialogPopUp(isShowingDialog: Boolean, callback:() -> Unit) {
             onDismissRequest = { },
             modifier = Modifier
                 .fillMaxWidth(0.95f)
-                .fillMaxHeight(0.55f)
-                .testTag(ALERT_DIALOG_TEST_TAG),
+                .fillMaxHeight(0.55f),
             confirmButton = {},
             dismissButton = {
                 OutlinedButton(

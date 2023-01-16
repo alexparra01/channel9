@@ -56,7 +56,6 @@ fun MainScreen(
             AlertDialogPopUp(isShowingDialog = true) { viewModel.fetchNewsArticles() }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)

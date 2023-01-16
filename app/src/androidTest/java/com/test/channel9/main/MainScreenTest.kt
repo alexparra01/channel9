@@ -20,7 +20,7 @@ class MainScreenTest {
     
     @Test
     fun showLoadingStateTest(){
-        composeTestRule.waitForIdle()
+        composeTestRule.waitUntil { composeTestRule.onAllNodesWithTag(LOADING_TEST_TAG).fetchSemanticsNodes().size == 1 }
         composeTestRule.onNodeWithTag(LOADING_TEST_TAG).assertExists().assertIsDisplayed()
     }
 
