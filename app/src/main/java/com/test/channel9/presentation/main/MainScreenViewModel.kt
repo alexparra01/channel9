@@ -1,10 +1,8 @@
 package com.test.channel9.presentation.main
 
+import android.content.Context
 import android.util.Log
 import androidx.annotation.VisibleForTesting
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.test.channel9.domain.models.Asset
@@ -13,7 +11,6 @@ import com.test.channel9.domain.models.states.netmodels.NetworkResult
 import com.test.channel9.domain.usecases.NewsArticlesUseCase
 import com.test.channel9.presentation.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,13 +20,11 @@ class MainScreenViewModel @Inject constructor(
     private val newsArticlesUseCase: NewsArticlesUseCase
     ): ViewModel() {
 
-    private var articles: List<Asset> by mutableStateOf(emptyList())
     private var _refreshState = MutableStateFlow(false)
     val refreshState = _refreshState.asStateFlow()
     private var _state = MutableStateFlow<MainScreenState>(MainScreenState.ShowLoading)
     val state = _state.asStateFlow()
 
-    @OptIn(FlowPreview::class)
     fun fetchNewsArticles () {
         viewModelScope.launch {
             newsArticlesUseCase.fetchNewsArticles()
@@ -40,7 +35,7 @@ class MainScreenViewModel @Inject constructor(
                     when(it){
                         is NetworkResult.Success -> {
                             it.data?.assets?.let { articles ->
-                                this@MainScreenViewModel.articles = articles
+                                newsArticlesUseCase.setArticles(articles)
                                 _state.value = MainScreenState.ShowData
                             }
                             Log.d(::MainActivity.name, Constants.SUCCESS)
@@ -56,7 +51,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun articlesList(): List<Asset> {
-        return newsArticlesUseCase.sortListDescending(articles)
+        return newsArticlesUseCase.sortListDescending(newsArticlesUseCase.getArticles())
     }
 
     fun findThumbnailImage(relatedImages: List<RelatedImage>) = newsArticlesUseCase.getThumbnailImageUrl(relatedImages)
@@ -67,8 +62,12 @@ class MainScreenViewModel @Inject constructor(
         data class ShowError(val errorMessage: String): MainScreenState()
     }
 
+    fun setupWorkManager(context: Context) {
+        newsArticlesUseCase.setupWorkManager(context = context)
+    }
+
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun setArticlesList(assets : List<Asset>){
-        articles = assets
+        newsArticlesUseCase.setArticles(assets)
     }
 }

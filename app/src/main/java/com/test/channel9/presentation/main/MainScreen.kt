@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -29,12 +30,11 @@ import com.test.channel9.domain.models.Asset
 import com.test.channel9.domain.models.states.navigation.AppNavigationState
 import com.test.channel9.presentation.extensions.navigate
 import com.test.channel9.presentation.uicomponents.alertdialog.AlertDialogPopUp
-import com.test.channel9.presentation.uicomponents.gestures.rememberForeverLazyListState
 import com.test.channel9.presentation.uicomponents.loaging.LoadingScreen
+import com.test.channel9.presentation.uicomponents.permissions.NotificationsPermission
 import com.test.channel9.presentation.uicomponents.visibility.Visibility
 import com.test.channel9.presentation.util.Constants
 
-const val OVERVIEW = "Overview"
 const val NEWS_ARTICLES_TEST_TAG = "news_articles_test_tag"
 
 @Composable
@@ -49,6 +49,7 @@ fun MainScreen(
         is MainScreenViewModel.MainScreenState.ShowData -> {
             LoadingScreen(isVisible = false)
             AlertDialogPopUp(isShowingDialog = false) {}
+            NotificationsPermission()
             NewsArticlesListLayout(viewModel, navHostController )
         }
         is MainScreenViewModel.MainScreenState.ShowError -> {
@@ -83,9 +84,8 @@ fun NewsArticlesListLayout(viewModel: MainScreenViewModel, navHostController: Na
                     titleContentColor = Color.White,
                 ),
             )
-
             LazyColumn(
-                state = rememberForeverLazyListState(key = OVERVIEW),
+                state = rememberLazyListState(),
                 modifier = Modifier
                     .fillMaxSize()
                     .testTag(NEWS_ARTICLES_TEST_TAG)

@@ -1,5 +1,9 @@
 package com.test.channel9.domain.usecases
 
+import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.test.channel9.domain.models.Asset
 import com.test.channel9.domain.models.NewsArticles
 import com.test.channel9.domain.models.RelatedImage
@@ -9,19 +13,27 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import okio.IOException
 import javax.inject.Inject
 
+const val SMALL_IMAGE_TYPE = "thumbnail"
 interface NewsArticlesUseCase {
     suspend fun fetchNewsArticles(): Flow<NetworkResult<NewsArticles>>
     fun sortListDescending(assets: List<Asset>): List<Asset>
     fun getThumbnailImageUrl(images: List<RelatedImage>): RelatedImage
+    fun hasTheLatestNews(assets: List<Asset>, oldAssets: List<Asset>):Boolean
+    fun setArticles(assets: List<Asset>)
+    fun getArticles():List<Asset>
+    fun getTheLatestArticle(): Asset
+    fun setupWorkManager(context: Context)
+
 }
 
 class NewsArticlesUseCaseImpl @Inject constructor(
     private val newsArticlesRepository: NewsArticlesRepository
     ): NewsArticlesUseCase {
 
+   var articlesList: List<Asset> by mutableStateOf(emptyList())
+        private set
     override suspend fun fetchNewsArticles(): Flow<NetworkResult<NewsArticles>> {
         return flow {
             try {
@@ -42,7 +54,31 @@ class NewsArticlesUseCaseImpl @Inject constructor(
     }
 
     override fun getThumbnailImageUrl(images: List<RelatedImage>): RelatedImage {
-        return images.find { it.type == "thumbnail" } ?: RelatedImage(url = "", type = "")
+        return images.find { it.type == SMALL_IMAGE_TYPE } ?: RelatedImage(url = "", type = "")
+    }
+
+    override fun hasTheLatestNews(assets: List<Asset>, oldAssets: List<Asset>): Boolean {
+        return if(oldAssets.isNotEmpty() && assets.isNotEmpty()){
+            sortListDescending(oldAssets).first() == sortListDescending(assets).first()
+        } else {
+            oldAssets.isEmpty() && assets.isNotEmpty()
+        }
+    }
+
+    override fun setArticles(assets: List<Asset>) {
+        articlesList = assets
+    }
+
+    override fun getArticles(): List<Asset> {
+        return articlesList
+    }
+
+    override fun getTheLatestArticle(): Asset {
+        return sortListDescending(articlesList).first()
+    }
+
+    override fun setupWorkManager(context: Context) {
+        newsArticlesRepository.setupWorkManager(context)
     }
 
 }
